@@ -1,0 +1,42 @@
+
+{
+  // --- Git & Source Control ---
+  "workbench.colorTheme": "Noctis Minimus",
+  "git.autorefresh": true,
+  "git.autoRepositoryDetection": "openEditors",   // reduce carga si tienes varios repos
+  "git.untrackedChanges": "separate",
+  "git.refreshWhenHidden": false,
+  "git.pruneOnFetch": true,
+  "git.followSymlinks": false,
+  "remote.WSL.fileWatcher.pollingInterval": 2000,
+
+  // --- Watcher en WSL ---
+  // En /mnt/c los eventos se pierden; el polling los recupera.
+  "remote.WSL.fileWatcher.polling": true,
+
+  
+ 
+  "black-formatter.args": ["--line-length", "79"],
+
+  // No excluyas .git para que el panel se actualice en caliente
+  "files.watcherExclude": {
+    "**/node_modules/**": true,
+    "**/dist/**": true,
+    "**/build/**": true,
+    "**/.next/**": true,
+    "**/.cache/**": true
+  },
+
+  // Opcional: watcher experimental (puede ayudar en algunos setups)
+  "files.useExperimentalFileWatcher": true,
+
+  // --- Editor/Performance ---
+  "search.followSymlinks": false,
+  "explorer.autoReveal": false,
+
+  // --- (Opcional) Rutas Git explícitas en WSL ---
+  // Suele no hacer falta; activa si el "Git: Show Git Output" muestra algo raro.
+  // "git.path": "/usr/bin/git"
+
+  
+}
