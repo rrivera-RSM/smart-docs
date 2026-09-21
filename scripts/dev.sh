@@ -9,12 +9,12 @@ ensure_smartdocs_node
 
 cd "$PROJECT_DIR"
 
-API_PORT="${SMARTDOCS_API_PORT:-8000}"
+API_PORT="${SMARTDOCS_API_PORT:-8050}"
 while ss -H -ltn "sport = :$API_PORT" | grep -q .; do
   API_PORT=$((API_PORT + 1))
 done
 
-WEB_PORT="${SMARTDOCS_WEB_PORT:-3000}"
+WEB_PORT="${SMARTDOCS_WEB_PORT:-3050}"
 while ss -H -ltn "sport = :$WEB_PORT" | grep -q .; do
   WEB_PORT=$((WEB_PORT + 1))
 done

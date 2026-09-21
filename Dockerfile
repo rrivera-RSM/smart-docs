@@ -41,12 +41,12 @@ RUN useradd --create-home --uid 10001 smartdocs \
 
 USER smartdocs
 
-EXPOSE 8000
+EXPOSE 8050
 
 HEALTHCHECK --interval=30s --timeout=5s --start-period=90s --retries=5 \
-    CMD python -c "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/api/health')"
+    CMD python -c "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8050/api/health')"
 
-CMD ["uvicorn", "apps.api.main:app", "--host", "0.0.0.0", "--port", "8000", "--workers", "1"]
+CMD ["uvicorn", "apps.api.main:app", "--host", "0.0.0.0", "--port", "8050", "--workers", "1"]
 
 
 FROM node:24.5-alpine AS web-dependencies
@@ -60,7 +60,7 @@ FROM node:24.5-alpine AS web-build
 
 WORKDIR /app
 
-ARG SMARTDOCS_API_PROXY_TARGET=http://api:8000
+ARG SMARTDOCS_API_PROXY_TARGET=http://api:8050
 ARG SMARTDOCS_FEATURE_PDF=false
 ARG SMARTDOCS_FEATURE_IMAGE_OCR=false
 ARG SMARTDOCS_FEATURE_WEBADMIN=false
@@ -81,7 +81,7 @@ FROM node:24.5-alpine AS web
 ENV NODE_ENV=production \
     NEXT_TELEMETRY_DISABLED=1 \
     HOSTNAME=0.0.0.0 \
-    PORT=3000
+    PORT=3050
 
 WORKDIR /app
 
@@ -91,9 +91,9 @@ COPY --from=web-build --chown=node:node /app/public ./public
 
 USER node
 
-EXPOSE 3000
+EXPOSE 3050
 
 HEALTHCHECK --interval=30s --timeout=5s --start-period=20s --retries=3 \
-    CMD wget -qO- http://127.0.0.1:3000/ >/dev/null || exit 1
+    CMD wget -qO- http://127.0.0.1:3050/ >/dev/null || exit 1
 
 CMD ["node", "server.js"]

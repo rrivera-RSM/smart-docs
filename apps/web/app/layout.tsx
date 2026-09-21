@@ -10,7 +10,7 @@ import "./people-analytics.css";
 export async function generateMetadata(): Promise<Metadata> {
   const incomingHeaders = await headers();
   const forwardedHost = incomingHeaders.get("x-forwarded-host");
-  const host = forwardedHost ?? incomingHeaders.get("host") ?? "127.0.0.1:3000";
+  const host = forwardedHost ?? incomingHeaders.get("host") ?? "127.0.0.1:3050";
   const protocol =
     incomingHeaders.get("x-forwarded-proto") ??
     (host.startsWith("localhost") || host.startsWith("127.0.0.1")
