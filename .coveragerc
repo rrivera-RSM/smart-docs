@@ -1,0 +1,16 @@
+[run]
+branch = True
+source =
+    src/docgen
+    apps/api
+omit =
+    src/docgen/app.py
+    src/docgen/ui/*
+
+[report]
+exclude_lines =
+    pragma: no cover
+    if __name__ == .__main__.:
+show_missing = True
+skip_covered = True
+fail_under = 75

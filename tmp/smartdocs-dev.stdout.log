@@ -1,0 +1,29 @@
+SmartDocs: http://127.0.0.1:3003
+SmartDocs API: http://127.0.0.1:8000/docs
+
+> smartdocs-web@0.2.0 dev
+> next dev --hostname 127.0.0.1 --port 3003
+
+▲ Next.js 16.2.11 (Turbopack)
+- Local:         http://127.0.0.1:3003
+- Network:       http://127.0.0.1:3003
+✓ Ready in 665ms
+
+ GET / 200 in 594ms (next.js: 250ms, application-code: 344ms)
+INFO:     127.0.0.1:50346 - "GET /api/anonymizer/capabilities HTTP/1.1" 200 OK
+ GET / 200 in 190ms (next.js: 20ms, application-code: 170ms)
+INFO:     127.0.0.1:37624 - "GET /api/anonymizer/capabilities HTTP/1.1" 200 OK
+INFO:     127.0.0.1:37628 - "POST /api/anonymizer/analyze HTTP/1.1" 202 Accepted
+INFO:     127.0.0.1:37640 - "GET /api/anonymizer/85719e022d6c42c59594a24e039a0974 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:37650 - "GET /api/anonymizer/85719e022d6c42c59594a24e039a0974 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:37654 - "GET /api/anonymizer/85719e022d6c42c59594a24e039a0974 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:37662 - "POST /api/anonymizer/85719e022d6c42c59594a24e039a0974/apply HTTP/1.1" 202 Accepted
+INFO:     127.0.0.1:37676 - "GET /api/anonymizer/85719e022d6c42c59594a24e039a0974 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:37682 - "DELETE /api/anonymizer/85719e022d6c42c59594a24e039a0974 HTTP/1.1" 204 No Content
+ GET /anonimizador 200 in 151ms (next.js: 38ms, application-code: 113ms)
+INFO:     127.0.0.1:52966 - "GET /api/anonymizer/capabilities HTTP/1.1" 200 OK
+✓ Compiled in 320ms
+ GET /anonimizador 200 in 138ms (next.js: 45ms, application-code: 93ms)
+ GET /anonimizador 200 in 51ms (next.js: 4ms, application-code: 46ms)
+✓ Compiled in 8ms
+ GET /anonimizador 200 in 151ms (next.js: 8ms, application-code: 144ms)

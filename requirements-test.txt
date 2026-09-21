@@ -1,0 +1,4 @@
+-r requirements-api.txt
+pytest>=8.4,<10
+pytest-cov>=6,<8
+

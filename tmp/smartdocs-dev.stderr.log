@@ -1,0 +1,7 @@
+INFO:     Will watch for changes in these directories: ['/home/rubenrivi/RSM/innovation/smart-docs']
+INFO:     Uvicorn running on http://127.0.0.1:8000 (Press CTRL+C to quit)
+INFO:     Started reloader process [3468] using WatchFiles
+Device set to use cpu
+INFO:     Started server process [3493]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
