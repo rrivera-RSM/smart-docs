@@ -42,7 +42,7 @@ app = FastAPI(
 )
 store = InMemoryJobStore(ttl_minutes=30)
 
-default_origins = "http://localhost:3000,http://127.0.0.1:3000"
+default_origins = "http://localhost:3050,http://127.0.0.1:3050"
 allowed_origins = [
     origin.strip()
     for origin in os.getenv("SMARTDOCS_ALLOWED_ORIGINS", default_origins).split(",")

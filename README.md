@@ -59,11 +59,11 @@ Desde WSL:
 
 La aplicación estará disponible normalmente en:
 
-    http://127.0.0.1:3000
+    http://127.0.0.1:3050
 
 La API y su documentación interactiva estarán normalmente en:
 
-    http://127.0.0.1:8000/docs
+    http://127.0.0.1:8050/docs
 
 Si alguno de esos puertos está ocupado, el script selecciona automáticamente
 el siguiente puerto libre y configura el proxy de Next.js. Las URLs reales se
@@ -100,7 +100,8 @@ También pueden iniciarse por separado:
 
 El despliegue de producción se compone de una imagen FastAPI y otra Next.js. La
 API solo se expone a la red interna de Compose y la web se publica, por defecto,
-en el puerto `3003`. El modelo NER aprobado se descarga y verifica durante el
+en el puerto `3050`; la API queda disponible localmente en `8050`. El modelo NER
+aprobado se descarga y verifica durante el
 build de la imagen; el contenedor no descarga modelos en runtime.
 
     cp .env.example .env

@@ -14,6 +14,8 @@ services:
       SMARTDOCS_FEATURE_IMAGE_OCR: ${SMARTDOCS_FEATURE_IMAGE_OCR:-false}
       SMARTDOCS_FEATURE_WEBADMIN: ${SMARTDOCS_FEATURE_WEBADMIN:-false}
     restart: unless-stopped
+    ports:
+      - "${SMARTDOCS_API_BIND_ADDRESS:-127.0.0.1}:${SMARTDOCS_API_PORT:-8050}:8050"
     read_only: true
     tmpfs:
       - /tmp:size=256m,mode=1777
@@ -22,7 +24,7 @@ services:
         - CMD
         - python
         - -c
-        - import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/api/health')
+        - import urllib.request; urllib.request.urlopen('http://127.0.0.1:8050/api/health')
       interval: 30s
       timeout: 5s
       start_period: 90s
@@ -33,18 +35,18 @@ services:
       context: .
       target: web
       args:
-        SMARTDOCS_API_PROXY_TARGET: http://api:8000
+        SMARTDOCS_API_PROXY_TARGET: http://api:8050
         SMARTDOCS_FEATURE_PDF: ${SMARTDOCS_FEATURE_PDF:-false}
         SMARTDOCS_FEATURE_IMAGE_OCR: ${SMARTDOCS_FEATURE_IMAGE_OCR:-false}
         SMARTDOCS_FEATURE_WEBADMIN: ${SMARTDOCS_FEATURE_WEBADMIN:-false}
     environment:
       HOSTNAME: 0.0.0.0
-      PORT: "3000"
+      PORT: "3050"
     depends_on:
       api:
         condition: service_healthy
     ports:
-      - "${SMARTDOCS_BIND_ADDRESS:-0.0.0.0}:${SMARTDOCS_WEB_PORT:-3003}:3000"
+      - "${SMARTDOCS_BIND_ADDRESS:-0.0.0.0}:${SMARTDOCS_WEB_PORT:-3050}:3050"
     restart: unless-stopped
     init: true
 
