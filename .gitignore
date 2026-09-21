@@ -7,3 +7,22 @@ build/
 poetry.lock
 .streamlit/
 .DS_Store
+
+# Frontend
+node_modules/
+dist/
+.next/
+out/
+*.tsbuildinfo
+
+# Local environment
+.env
+.env.local
+!.env.example
+.models/
+
+# Tests and coverage
+.coverage
+coverage.xml
+htmlcov/
+.pytest_cache/

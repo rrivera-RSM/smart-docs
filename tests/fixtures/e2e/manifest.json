@@ -1,0 +1,109 @@
+{
+  "schema_version": 1,
+  "anonymizer_cases": [
+    {
+      "id": "docx_contract",
+      "path": "anonymizer/contrato_servicios.docx",
+      "format": "docx",
+      "minimum_findings": 18,
+      "expected_values": {
+        "PERSON": ["Laura Sánchez Pérez"],
+        "ORGANIZATION": ["Innovación Atlántica S.L"],
+        "ES_TAX_ID": ["B12345674"],
+        "ES_DNI": ["12345678Z"],
+        "PASSPORT": ["PA-123456"],
+        "EMAIL": ["laura.sanchez@example.com"],
+        "ES_PHONE": ["+34 612 345 678"],
+        "ES_IBAN": ["ES91 2100 0418 4502 0005 1332"],
+        "CREDIT_CARD": ["4111 1111 1111 1111"],
+        "SWIFT": ["CAIXESBBXXX"],
+        "VEHICLE_PLATE": ["1234 BCD"],
+        "MONEY": ["1.234,56 €"]
+      }
+    },
+    {
+      "id": "pdf_digital_invoice",
+      "path": "anonymizer/factura_proveedor.pdf",
+      "format": "pdf",
+      "minimum_findings": 9,
+      "expected_values": {
+        "ORGANIZATION": ["Proveedor Norte Azul Consultores S.L"],
+        "ES_TAX_ID": ["B12345674"],
+        "PASSPORT": ["PA-123456"],
+        "EMAIL": ["ana.lopez@example.com"],
+        "ES_PHONE": ["+34 612 345 678"],
+        "ES_IBAN": ["ES91 2100 0418 4502 0005 1332"],
+        "MONEY": ["1.234,56 €"]
+      }
+    },
+    {
+      "id": "pdf_scanned_form",
+      "path": "anonymizer/formulario_alta_escaneado.pdf",
+      "format": "pdf",
+      "minimum_findings": 6,
+      "slow": true,
+      "requires_ocr": true,
+      "expected_values": {
+        "PERSON": ["Ana Lopez Martin"],
+        "ES_DNI": ["12345678Z"],
+        "PASSPORT": ["PA123456"],
+        "EMAIL": ["ana.lopez@example.com"],
+        "ES_PHONE": ["612345678"]
+      }
+    },
+    {
+      "id": "pptx_client_presentation",
+      "path": "anonymizer/presentacion_cliente.pptx",
+      "format": "pptx",
+      "minimum_findings": 12,
+      "expected_values": {
+        "PERSON": ["Ana López Martín"],
+        "ORGANIZATION": ["Norte Azul Consultores S.L"],
+        "ES_DNI": ["12345678Z"],
+        "PASSPORT": ["PA-123456"],
+        "EMAIL": ["ana.lopez@example.com"],
+        "ES_PHONE": ["+34 612 345 678"],
+        "ES_IBAN": ["ES91 2100 0418 4502 0005 1332"],
+        "MONEY": ["1.234,56 €"]
+      }
+    }
+  ],
+  "generator_cases": [
+    {
+      "id": "docx_letter_template",
+      "path": "generator/plantilla_carta_cliente.docx",
+      "format": "docx",
+      "variables": ["cliente", "representante", "importe"],
+      "context": {
+        "cliente": "Cliente Demo S.L.",
+        "representante": "Marta Rios",
+        "importe": "2450 EUR"
+      },
+      "expected_text": ["Cliente Demo", "Marta Rios", "2450"]
+    },
+    {
+      "id": "pdf_client_template",
+      "path": "generator/plantilla_ficha_cliente.pdf",
+      "format": "pdf",
+      "variables": ["cliente", "representante", "importe"],
+      "context": {
+        "cliente": "Cliente Demo S.L.",
+        "representante": "Marta Rios",
+        "importe": "2450 EUR"
+      },
+      "expected_text": ["Cliente Demo", "Marta Rios", "2450"]
+    },
+    {
+      "id": "pptx_proposal_template",
+      "path": "generator/plantilla_propuesta.pptx",
+      "format": "pptx",
+      "variables": ["cliente", "representante", "importe"],
+      "context": {
+        "cliente": "Cliente Demo S.L.",
+        "representante": "Marta Rios",
+        "importe": "2450 EUR"
+      },
+      "expected_text": ["Cliente Demo", "Marta Rios", "2450"]
+    }
+  ]
+}

@@ -1,0 +1,1272 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "SmartDocs API",
+    "description": "Document generation and human-reviewed anonymization.",
+    "version": "0.1.0"
+  },
+  "paths": {
+    "/api/anonymizer/capabilities": {
+      "get": {
+        "tags": [
+          "anonymizer"
+        ],
+        "summary": "Capabilities",
+        "operationId": "capabilities_api_anonymizer_capabilities_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CapabilitiesResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/anonymizer/analyze": {
+      "post": {
+        "tags": [
+          "anonymizer"
+        ],
+        "summary": "Analyze",
+        "operationId": "analyze_api_anonymizer_analyze_post",
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "$ref": "#/components/schemas/Body_analyze_api_anonymizer_analyze_post"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "202": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AnonymizerJobResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/anonymizer/{job_id}": {
+      "get": {
+        "tags": [
+          "anonymizer"
+        ],
+        "summary": "Get Job",
+        "operationId": "get_job_api_anonymizer__job_id__get",
+        "parameters": [
+          {
+            "name": "job_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Job Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AnonymizerJobResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "anonymizer"
+        ],
+        "summary": "Delete",
+        "operationId": "delete_api_anonymizer__job_id__delete",
+        "parameters": [
+          {
+            "name": "job_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Job Id"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Successful Response"
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/anonymizer/{job_id}/findings/manual": {
+      "post": {
+        "tags": [
+          "anonymizer"
+        ],
+        "summary": "Add Manual Finding",
+        "operationId": "add_manual_finding_api_anonymizer__job_id__findings_manual_post",
+        "parameters": [
+          {
+            "name": "job_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Job Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ManualFindingRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AnonymizerJobResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/anonymizer/{job_id}/apply": {
+      "post": {
+        "tags": [
+          "anonymizer"
+        ],
+        "summary": "Apply",
+        "operationId": "apply_api_anonymizer__job_id__apply_post",
+        "parameters": [
+          {
+            "name": "job_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Job Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ApplyRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "202": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AnonymizerJobResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/anonymizer/{job_id}/download": {
+      "get": {
+        "tags": [
+          "anonymizer"
+        ],
+        "summary": "Download",
+        "operationId": "download_api_anonymizer__job_id__download_get",
+        "parameters": [
+          {
+            "name": "job_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Job Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/health": {
+      "get": {
+        "summary": "Health",
+        "operationId": "health_api_health_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": {
+                    "type": "string"
+                  },
+                  "type": "object",
+                  "title": "Response Health Api Health Get"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/generator/analyze": {
+      "post": {
+        "summary": "Analyze For Generation",
+        "operationId": "analyze_for_generation_api_generator_analyze_post",
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "$ref": "#/components/schemas/Body_analyze_for_generation_api_generator_analyze_post"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": true,
+                  "type": "object",
+                  "title": "Response Analyze For Generation Api Generator Analyze Post"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/generator/{job_id}/repair": {
+      "post": {
+        "summary": "Repair Template",
+        "operationId": "repair_template_api_generator__job_id__repair_post",
+        "parameters": [
+          {
+            "name": "job_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Job Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": true,
+                  "title": "Response Repair Template Api Generator  Job Id  Repair Post"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/generator/{job_id}/generate": {
+      "post": {
+        "summary": "Generate Document",
+        "operationId": "generate_document_api_generator__job_id__generate_post",
+        "parameters": [
+          {
+            "name": "job_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Job Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GenerateDocumentRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": true,
+                  "title": "Response Generate Document Api Generator  Job Id  Generate Post"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/generator/{job_id}/download": {
+      "get": {
+        "summary": "Download Generated",
+        "operationId": "download_generated_api_generator__job_id__download_get",
+        "parameters": [
+          {
+            "name": "job_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Job Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "AnonymizerJobResponse": {
+        "properties": {
+          "job_id": {
+            "type": "string",
+            "title": "Job Id"
+          },
+          "filename": {
+            "type": "string",
+            "title": "Filename"
+          },
+          "document_format": {
+            "type": "string",
+            "enum": [
+              "docx",
+              "pdf",
+              "pptx"
+            ],
+            "title": "Document Format"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "queued",
+              "extracting",
+              "detecting",
+              "review_ready",
+              "applying",
+              "ready",
+              "failed"
+            ],
+            "title": "Status"
+          },
+          "progress": {
+            "type": "integer",
+            "maximum": 100.0,
+            "minimum": 0.0,
+            "title": "Progress"
+          },
+          "error": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Error"
+          },
+          "expires_in_minutes": {
+            "type": "integer",
+            "title": "Expires In Minutes"
+          },
+          "limitations": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Limitations"
+          },
+          "findings": {
+            "items": {
+              "$ref": "#/components/schemas/FindingResponse"
+            },
+            "type": "array",
+            "title": "Findings"
+          },
+          "groups": {
+            "items": {
+              "$ref": "#/components/schemas/FindingGroupResponse"
+            },
+            "type": "array",
+            "title": "Groups"
+          },
+          "blocks": {
+            "items": {
+              "$ref": "#/components/schemas/TextBlockResponse"
+            },
+            "type": "array",
+            "title": "Blocks"
+          },
+          "coverage_issues": {
+            "items": {
+              "$ref": "#/components/schemas/CoverageIssueResponse"
+            },
+            "type": "array",
+            "title": "Coverage Issues"
+          },
+          "summary": {
+            "additionalProperties": {
+              "type": "integer"
+            },
+            "type": "object",
+            "title": "Summary"
+          },
+          "applied_count": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Applied Count"
+          },
+          "remaining_count": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Remaining Count"
+          },
+          "download_url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Download Url"
+          },
+          "output_filename": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Output Filename"
+          }
+        },
+        "type": "object",
+        "required": [
+          "job_id",
+          "filename",
+          "document_format",
+          "status",
+          "progress",
+          "error",
+          "expires_in_minutes",
+          "limitations",
+          "findings",
+          "groups",
+          "blocks",
+          "coverage_issues",
+          "summary"
+        ],
+        "title": "AnonymizerJobResponse"
+      },
+      "ApplyRequest": {
+        "properties": {
+          "decisions": {
+            "items": {
+              "$ref": "#/components/schemas/GroupDecision"
+            },
+            "type": "array",
+            "minItems": 1,
+            "title": "Decisions"
+          },
+          "review_confirmed": {
+            "type": "boolean",
+            "title": "Review Confirmed",
+            "default": false
+          },
+          "remove_unsupported_content": {
+            "type": "boolean",
+            "title": "Remove Unsupported Content",
+            "default": false
+          }
+        },
+        "type": "object",
+        "required": [
+          "decisions"
+        ],
+        "title": "ApplyRequest"
+      },
+      "Body_analyze_api_anonymizer_analyze_post": {
+        "properties": {
+          "file": {
+            "type": "string",
+            "contentMediaType": "application/octet-stream",
+            "title": "File"
+          },
+          "options": {
+            "type": "string",
+            "title": "Options",
+            "default": "{}"
+          }
+        },
+        "type": "object",
+        "required": [
+          "file"
+        ],
+        "title": "Body_analyze_api_anonymizer_analyze_post"
+      },
+      "Body_analyze_for_generation_api_generator_analyze_post": {
+        "properties": {
+          "file": {
+            "type": "string",
+            "contentMediaType": "application/octet-stream",
+            "title": "File"
+          }
+        },
+        "type": "object",
+        "required": [
+          "file"
+        ],
+        "title": "Body_analyze_for_generation_api_generator_analyze_post"
+      },
+      "CapabilitiesResponse": {
+        "properties": {
+          "formats": {
+            "items": {
+              "$ref": "#/components/schemas/FormatCapability"
+            },
+            "type": "array",
+            "title": "Formats"
+          },
+          "features": {
+            "additionalProperties": {
+              "type": "boolean"
+            },
+            "type": "object",
+            "title": "Features"
+          },
+          "categories": {
+            "items": {
+              "$ref": "#/components/schemas/CategoryCapability"
+            },
+            "type": "array",
+            "title": "Categories"
+          },
+          "default_profile": {
+            "type": "string",
+            "const": "maximum",
+            "title": "Default Profile"
+          },
+          "model": {
+            "$ref": "#/components/schemas/ModelCapability"
+          },
+          "limits": {
+            "$ref": "#/components/schemas/LimitsCapability"
+          }
+        },
+        "type": "object",
+        "required": [
+          "formats",
+          "features",
+          "categories",
+          "default_profile",
+          "model",
+          "limits"
+        ],
+        "title": "CapabilitiesResponse"
+      },
+      "CategoryCapability": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "title": "Id"
+          },
+          "label": {
+            "type": "string",
+            "title": "Label"
+          },
+          "enabled_by_default": {
+            "type": "boolean",
+            "title": "Enabled By Default"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "label",
+          "enabled_by_default"
+        ],
+        "title": "CategoryCapability"
+      },
+      "CoverageIssueResponse": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "title": "Id"
+          },
+          "kind": {
+            "type": "string",
+            "title": "Kind"
+          },
+          "label": {
+            "type": "string",
+            "title": "Label"
+          },
+          "detail": {
+            "type": "string",
+            "title": "Detail"
+          },
+          "blocking": {
+            "type": "boolean",
+            "title": "Blocking"
+          },
+          "removable": {
+            "type": "boolean",
+            "title": "Removable"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "kind",
+          "label",
+          "detail",
+          "blocking",
+          "removable"
+        ],
+        "title": "CoverageIssueResponse"
+      },
+      "FindingGroupResponse": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "title": "Id"
+          },
+          "entity_type": {
+            "type": "string",
+            "title": "Entity Type"
+          },
+          "label": {
+            "type": "string",
+            "title": "Label"
+          },
+          "value": {
+            "type": "string",
+            "title": "Value"
+          },
+          "replacement": {
+            "type": "string",
+            "title": "Replacement"
+          },
+          "confidence": {
+            "type": "number",
+            "title": "Confidence"
+          },
+          "confidence_band": {
+            "type": "string",
+            "enum": [
+              "validated",
+              "probable",
+              "review"
+            ],
+            "title": "Confidence Band"
+          },
+          "finding_ids": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Finding Ids"
+          },
+          "occurrence_count": {
+            "type": "integer",
+            "title": "Occurrence Count"
+          },
+          "sources": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Sources"
+          },
+          "reason": {
+            "type": "string",
+            "title": "Reason"
+          },
+          "selected_by_default": {
+            "type": "boolean",
+            "title": "Selected By Default"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "entity_type",
+          "label",
+          "value",
+          "replacement",
+          "confidence",
+          "confidence_band",
+          "finding_ids",
+          "occurrence_count",
+          "sources",
+          "reason",
+          "selected_by_default"
+        ],
+        "title": "FindingGroupResponse"
+      },
+      "FindingResponse": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "title": "Id"
+          },
+          "group_id": {
+            "type": "string",
+            "title": "Group Id"
+          },
+          "entity_type": {
+            "type": "string",
+            "title": "Entity Type"
+          },
+          "label": {
+            "type": "string",
+            "title": "Label"
+          },
+          "value": {
+            "type": "string",
+            "title": "Value"
+          },
+          "replacement": {
+            "type": "string",
+            "title": "Replacement"
+          },
+          "location": {
+            "$ref": "#/components/schemas/LocationResponse"
+          },
+          "start": {
+            "type": "integer",
+            "title": "Start"
+          },
+          "end": {
+            "type": "integer",
+            "title": "End"
+          },
+          "context": {
+            "type": "string",
+            "title": "Context"
+          },
+          "confidence": {
+            "type": "number",
+            "title": "Confidence"
+          },
+          "confidence_band": {
+            "type": "string",
+            "enum": [
+              "validated",
+              "probable",
+              "review"
+            ],
+            "title": "Confidence Band"
+          },
+          "sources": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Sources"
+          },
+          "reason": {
+            "type": "string",
+            "title": "Reason"
+          },
+          "selected_by_default": {
+            "type": "boolean",
+            "title": "Selected By Default"
+          },
+          "is_manual": {
+            "type": "boolean",
+            "title": "Is Manual"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "group_id",
+          "entity_type",
+          "label",
+          "value",
+          "replacement",
+          "location",
+          "start",
+          "end",
+          "context",
+          "confidence",
+          "confidence_band",
+          "sources",
+          "reason",
+          "selected_by_default",
+          "is_manual"
+        ],
+        "title": "FindingResponse"
+      },
+      "FormatCapability": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "title": "Id"
+          },
+          "label": {
+            "type": "string",
+            "title": "Label"
+          },
+          "enabled": {
+            "type": "boolean",
+            "title": "Enabled"
+          },
+          "reason": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Reason"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "label",
+          "enabled"
+        ],
+        "title": "FormatCapability"
+      },
+      "GenerateDocumentRequest": {
+        "properties": {
+          "context": {
+            "additionalProperties": {
+              "type": "string"
+            },
+            "type": "object",
+            "title": "Context"
+          }
+        },
+        "type": "object",
+        "title": "GenerateDocumentRequest"
+      },
+      "GroupDecision": {
+        "properties": {
+          "group_id": {
+            "type": "string",
+            "maxLength": 64,
+            "minLength": 1,
+            "title": "Group Id"
+          },
+          "action": {
+            "type": "string",
+            "enum": [
+              "replace",
+              "keep"
+            ],
+            "title": "Action",
+            "default": "replace"
+          },
+          "replacement": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 40,
+                "minLength": 1
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Replacement"
+          }
+        },
+        "type": "object",
+        "required": [
+          "group_id"
+        ],
+        "title": "GroupDecision"
+      },
+      "HTTPValidationError": {
+        "properties": {
+          "detail": {
+            "items": {
+              "$ref": "#/components/schemas/ValidationError"
+            },
+            "type": "array",
+            "title": "Detail"
+          }
+        },
+        "type": "object",
+        "title": "HTTPValidationError"
+      },
+      "LimitsCapability": {
+        "properties": {
+          "compressed_mb": {
+            "type": "integer",
+            "title": "Compressed Mb"
+          },
+          "expanded_mb": {
+            "type": "integer",
+            "title": "Expanded Mb"
+          },
+          "retention_minutes": {
+            "type": "integer",
+            "title": "Retention Minutes"
+          }
+        },
+        "type": "object",
+        "required": [
+          "compressed_mb",
+          "expanded_mb",
+          "retention_minutes"
+        ],
+        "title": "LimitsCapability"
+      },
+      "LocationResponse": {
+        "properties": {
+          "kind": {
+            "type": "string",
+            "enum": [
+              "docx",
+              "pdf",
+              "pptx"
+            ],
+            "title": "Kind"
+          },
+          "part": {
+            "type": "string",
+            "title": "Part"
+          },
+          "block_index": {
+            "type": "integer",
+            "title": "Block Index"
+          },
+          "label": {
+            "type": "string",
+            "title": "Label"
+          }
+        },
+        "type": "object",
+        "required": [
+          "kind",
+          "part",
+          "block_index",
+          "label"
+        ],
+        "title": "LocationResponse"
+      },
+      "ManualFindingRequest": {
+        "properties": {
+          "block_id": {
+            "type": "string",
+            "maxLength": 240,
+            "minLength": 1,
+            "title": "Block Id"
+          },
+          "start": {
+            "type": "integer",
+            "minimum": 0.0,
+            "title": "Start"
+          },
+          "end": {
+            "type": "integer",
+            "exclusiveMinimum": 0.0,
+            "title": "End"
+          },
+          "entity_type": {
+            "type": "string",
+            "maxLength": 64,
+            "minLength": 1,
+            "title": "Entity Type"
+          },
+          "all_occurrences": {
+            "type": "boolean",
+            "title": "All Occurrences",
+            "default": true
+          }
+        },
+        "type": "object",
+        "required": [
+          "block_id",
+          "start",
+          "end",
+          "entity_type"
+        ],
+        "title": "ManualFindingRequest"
+      },
+      "ModelCapability": {
+        "properties": {
+          "ready": {
+            "type": "boolean",
+            "title": "Ready"
+          },
+          "provider": {
+            "type": "string",
+            "title": "Provider"
+          },
+          "version": {
+            "type": "string",
+            "title": "Version"
+          },
+          "detail": {
+            "type": "string",
+            "title": "Detail"
+          },
+          "local_only": {
+            "type": "boolean",
+            "title": "Local Only"
+          }
+        },
+        "type": "object",
+        "required": [
+          "ready",
+          "provider",
+          "version",
+          "detail",
+          "local_only"
+        ],
+        "title": "ModelCapability"
+      },
+      "TextBlockResponse": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "title": "Id"
+          },
+          "text": {
+            "type": "string",
+            "title": "Text"
+          },
+          "location": {
+            "$ref": "#/components/schemas/LocationResponse"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "text",
+          "location"
+        ],
+        "title": "TextBlockResponse"
+      },
+      "ValidationError": {
+        "properties": {
+          "loc": {
+            "items": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "integer"
+                }
+              ]
+            },
+            "type": "array",
+            "title": "Location"
+          },
+          "msg": {
+            "type": "string",
+            "title": "Message"
+          },
+          "type": {
+            "type": "string",
+            "title": "Error Type"
+          },
+          "input": {
+            "title": "Input"
+          },
+          "ctx": {
+            "type": "object",
+            "title": "Context"
+          }
+        },
+        "type": "object",
+        "required": [
+          "loc",
+          "msg",
+          "type"
+        ],
+        "title": "ValidationError"
+      }
+    }
+  }
+}

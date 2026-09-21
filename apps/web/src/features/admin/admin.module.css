@@ -1,0 +1,60 @@
+.page { display: grid; gap: 22px; }
+
+.heading { display: flex; align-items: flex-end; justify-content: space-between; gap: 30px; padding: 7px 0 3px; }
+.heading h1 { max-width: 850px; margin: 9px 0 0; color: var(--slate-950); font-size: clamp(2.15rem, 4vw, 3.45rem); font-weight: 750; line-height: 1.03; letter-spacing: -.048em; }
+.heading p { max-width: 730px; margin: 15px 0 0; color: var(--slate-500); font-size: .96rem; line-height: 1.65; }
+.eyebrow { color: var(--rsm-blue-dark); font-size: .69rem; font-weight: 850; letter-spacing: .12em; text-transform: uppercase; }
+.pilotBadge { flex: 0 0 auto; padding: 7px 10px; border: 1px solid rgba(0,156,222,.25); border-radius: 8px; color: var(--rsm-blue-dark); background: rgba(0,156,222,.07); font-size: .68rem; font-weight: 800; text-transform: uppercase; }
+
+.panel { border: 1px solid #d7dee4; border-radius: 11px; background: rgba(255,255,255,.92); box-shadow: var(--shadow-sm); }
+.policyGrid { display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: 16px; }
+.policyCard { display: grid; grid-template-columns: auto minmax(0,1fr); align-items: start; gap: 13px; padding: 24px; }
+.policyCard > span { display: grid; width: 40px; height: 40px; place-items: center; border-radius: 9px; color: var(--rsm-blue-dark); background: rgba(0,156,222,.09); }
+.policyAllowed > span { color: #2f7029; background: rgba(63,156,53,.1); }
+.policyPending > span { color: var(--slate-600); background: var(--slate-100); }
+.policyCard small, .policyCard strong { display: block; }
+.policyCard small { color: var(--slate-500); font-size: .62rem; font-weight: 800; letter-spacing: .05em; text-transform: uppercase; }
+.policyCard strong { margin-top: 6px; color: var(--slate-950); font-size: .88rem; }
+.policyCard p { margin: 7px 0 0; color: var(--slate-500); font-size: .69rem; line-height: 1.5; }
+
+.directory { overflow: hidden; box-shadow: var(--shadow); }
+.directoryHeading { display: flex; align-items: center; justify-content: space-between; gap: 24px; padding: 22px 24px; border-bottom: 1px solid #d7dee4; }
+.panelHeading { display: flex; align-items: center; gap: 13px; }
+.panelHeading > span { display: grid; width: 42px; height: 42px; place-items: center; border-radius: 9px; color: var(--rsm-blue-dark); background: rgba(0,156,222,.09); }
+.panelHeading h2 { margin: 0; color: var(--slate-950); font-size: 1.05rem; letter-spacing: -.02em; }
+.panelHeading p { margin: 5px 0 0; color: var(--slate-500); font-size: .76rem; }
+.refreshButton { display: grid; width: 36px; height: 36px; padding: 0; place-items: center; border: 1px solid var(--slate-300); border-radius: 8px; color: var(--slate-500); background: white; cursor: pointer; }
+.refreshButton:disabled { cursor: wait; opacity: .55; }
+
+.tableScroll { overflow-x: auto; }
+.serviceTable { width: 100%; min-width: 720px; border-collapse: collapse; }
+.serviceTable th { padding: 11px 15px; border-bottom: 1px solid #d7dee4; color: var(--slate-500); background: var(--slate-50); font-size: .61rem; font-weight: 850; letter-spacing: .045em; text-align: left; text-transform: uppercase; }
+.serviceTable td { padding: 15px; border-bottom: 1px solid var(--slate-200); color: var(--slate-600); font-size: .7rem; }
+.serviceTable tbody tr:last-child td { border-bottom: 0; }
+.serviceName { display: inline-flex; align-items: center; gap: 9px; color: var(--rsm-blue-dark); }
+.serviceName strong { color: var(--slate-950); font-size: .73rem; }
+.statusReady, .statusPending { display: inline-flex; align-items: center; gap: 6px; padding: 5px 8px; border-radius: 999px; font-size: .62rem; font-weight: 800; white-space: nowrap; }
+.statusReady { color: #2f7029; background: rgba(63,156,53,.1); }
+.statusPending { color: #8b570d; background: #fff6dd; }
+
+.accessNote, .error { display: flex; align-items: flex-start; gap: 10px; padding: 14px 16px; border-radius: 10px; font-size: .74rem; line-height: 1.5; }
+.accessNote { border: 1px solid rgba(217,119,6,.25); color: #7b4806; background: rgba(245,158,11,.075); }
+.accessNote svg { flex: 0 0 auto; margin-top: 1px; }
+.accessNote strong { color: #6f4105; }
+.accessNote p { margin: 3px 0 0; }
+.error { border: 1px solid rgba(228,0,70,.24); color: #8f002c; background: rgba(228,0,70,.06); }
+.error span { flex: 1; }
+.error button { border: 0; color: inherit; background: transparent; font: inherit; font-weight: 800; cursor: pointer; }
+.spin { animation: spin .8s linear infinite; }
+@keyframes spin { to { transform: rotate(360deg); } }
+
+@media (max-width: 920px) {
+  .heading { align-items: flex-start; flex-direction: column; }
+  .policyGrid { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 640px) {
+  .heading h1 { font-size: 2.1rem; }
+  .pilotBadge { display: none; }
+  .directoryHeading { align-items: flex-start; }
+}

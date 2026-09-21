@@ -1,0 +1,18 @@
+-r requirements.txt
+fastapi>=0.115,<1
+httpx>=0.28,<1
+python-multipart>=0.0.20,<1
+uvicorn[standard]>=0.34,<1
+--extra-index-url https://download.pytorch.org/whl/cpu
+torch==2.7.1+cpu
+transformers==4.57.6
+presidio-analyzer[transformers]==2.2.364
+huggingface-hub==0.36.2
+spacy==3.8.14
+es-core-news-sm @ https://github.com/explosion/spacy-models/releases/download/es_core_news_sm-3.8.0/es_core_news_sm-3.8.0-py3-none-any.whl
+docling-slim[format-pdf-pypdfium2,format-pptx,feat-ocr-rapidocr-onnx]==2.124.0
+pypdf==6.16.2
+pypdfium2==5.13.0
+rapidocr==3.9.2
+onnxruntime==1.29.0
+reportlab==5.0.1

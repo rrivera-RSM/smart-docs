@@ -1,0 +1,15 @@
+{"kind":"deck","id":"pr/x52l3z","name":"Deck"}
+{"kind":"layout","layoutId":"9c0a357f-a24f-4196-98ad-cc3bfcb36bab","name":"Master","type":"master"}
+{"kind":"layout","layoutId":"f6d3dfbf-0a58-4093-9545-2cd2c0d188e0","name":"Title Slide","type":"title"}
+{"kind":"slide","id":"sl/lvq0g1","slide":1,"title":"IDENTIFICACIÓN","textShapes":4}
+{"kind":"textbox","id":"sh/zudovqtw","slide":1,"text":"IDENTIFICACIÓN","textPreview":"IDENTIFICACIÓN","textChars":14,"textLines":1,"bbox":[76,42,1128,28]}
+{"kind":"textbox","id":"sh/0vm54vah","slide":1,"text":"Ficha de cliente","textPreview":"Ficha de cliente","textChars":16,"textLines":1,"bbox":[76,82,1128,72]}
+{"kind":"textbox","id":"sh/1gv6x0b2","slide":1,"text":"Empresa: Norte Azul Consultores S.L.\n\nRepresentante: Doña Ana López Martín\n\nDNI: 12345678Z\n\nPasaporte: PA-123456\n\nCorreo: ana.lopez@example.com","textPreview":"Empresa: Norte Azul Consultores S.L. |  | Representante: Doña Ana López Martín |  | DNI: 12345678Z |  | Pasaporte: PA-123456 |  | Correo:...","textChars":143,"textLines":9,"bbox":[84,188,1080,410]}
+{"kind":"textbox","id":"sh/qpknylsf","slide":1,"text":"SmartDocs · documento de prueba","textPreview":"SmartDocs · documento de prueba","textChars":31,"textLines":1,"bbox":[84,650,1080,24]}
+{"kind":"notes","id":"nt/lvq0g1","slide":1,"text":"Contacto alternativo: ana.lopez@example.com"}
+{"kind":"slide","id":"sl/ra4rwd","slide":2,"title":"CONTRATO","textShapes":4}
+{"kind":"textbox","id":"sh/ip87mlsz","slide":2,"text":"CONTRATO","textPreview":"CONTRATO","textChars":8,"textLines":1,"bbox":[76,42,1128,28]}
+{"kind":"textbox","id":"sh/5sz6h0bq","slide":2,"text":"Condiciones económicas","textPreview":"Condiciones económicas","textChars":22,"textLines":1,"bbox":[76,82,1128,72]}
+{"kind":"textbox","id":"sh/4rqpova5","slide":2,"text":"Dirección: Calle Alcalá 85, 28009 Madrid\n\nTeléfono: +34 612 345 678\n\nIBAN: ES91 2100 0418 4502 0005 1332\n\nImporte aprobado: 1.234,56 €\n\nPaís del proyecto: Portugal","textPreview":"Dirección: Calle Alcalá 85, 28009 Madrid |  | Teléfono: +34 612 345 678 |  | IBAN: ES91 2100 0418 4502 0005 1332 |  | Importe aprobado: 1...","textChars":163,"textLines":9,"bbox":[84,188,1080,410]}
+{"kind":"textbox","id":"sh/ruhojqtw","slide":2,"text":"SmartDocs · documento de prueba","textPreview":"SmartDocs · documento de prueba","textChars":31,"textLines":1,"bbox":[84,650,1080,24]}
+{"kind":"notes","id":"nt/ra4rwd","slide":2,"text":""}
