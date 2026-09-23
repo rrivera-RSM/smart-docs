@@ -9,6 +9,10 @@ function publicFlag(publicName: string, serverName: string): string {
 
 const nextConfig: NextConfig = {
   output: "standalone",
+  experimental: {
+    // Allow the API's 15 MiB files plus multipart fields and boundaries.
+    proxyClientMaxBodySize: 20 * 1024 * 1024,
+  },
   env: {
     NEXT_PUBLIC_SMARTDOCS_FEATURE_PDF: publicFlag(
       "NEXT_PUBLIC_SMARTDOCS_FEATURE_PDF",

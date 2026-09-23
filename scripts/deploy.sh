@@ -4,10 +4,18 @@ set -euo pipefail
 PROJECT_DIR="$(cd "$(dirname "$0")/.." && pwd)"
 cd "$PROJECT_DIR"
 
-docker compose --env-file .env up --build --detach --remove-orphans
-docker compose ps
+ENV_FILE="${SMARTDOCS_ENV_FILE:-.env}"
+DEPLOY_TIMEOUT="${SMARTDOCS_DEPLOY_TIMEOUT:-300}"
+COMPOSE=(docker compose --env-file "$ENV_FILE")
 
-WEB_PORT="${SMARTDOCS_WEB_PORT:-3050}"
-API_PORT="${SMARTDOCS_API_PORT:-8050}"
-echo "SmartDocs desplegado en http://127.0.0.1:${WEB_PORT}"
-echo "SmartDocs API en http://127.0.0.1:${API_PORT}/docs"
+if ! "${COMPOSE[@]}" up --build --detach --wait --wait-timeout "$DEPLOY_TIMEOUT"; then
+  echo "El despliegue no ha alcanzado un estado saludable." >&2
+  "${COMPOSE[@]}" ps -a || true
+  "${COMPOSE[@]}" logs --tail=80 api web || true
+  exit 1
+fi
+
+"${COMPOSE[@]}" ps
+echo "SmartDocs listo. Puertos publicados:"
+"${COMPOSE[@]}" port web 3050
+"${COMPOSE[@]}" port api 8050

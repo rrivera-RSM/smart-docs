@@ -16,3 +16,13 @@ compose*.yml
 output
 tmp
 coverage.xml
+
+# Never overlay container dependencies or builds with host artifacts.
+**/node_modules
+**/.next
+**/dist
+**/out
+**/*.tsbuildinfo
+**/__pycache__
+**/.env
+**/.env.*
