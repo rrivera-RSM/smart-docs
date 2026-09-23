@@ -56,7 +56,7 @@ COPY apps/web/package.json apps/web/package-lock.json ./
 RUN npm ci
 
 
-FROM node:24.5-alpine AS web-build
+FROM web-dependencies AS web-build
 
 WORKDIR /app
 
@@ -71,9 +71,15 @@ ENV SMARTDOCS_API_PROXY_TARGET=$SMARTDOCS_API_PROXY_TARGET \
     SMARTDOCS_FEATURE_IMAGE_OCR=$SMARTDOCS_FEATURE_IMAGE_OCR \
     SMARTDOCS_FEATURE_WEBADMIN=$SMARTDOCS_FEATURE_WEBADMIN
 
-COPY --from=web-dependencies /app/node_modules ./node_modules
-COPY apps/web ./
-RUN npm run build
+# Copy only source files: local builds, native dependencies and .env files
+# must not overwrite the clean container installation.
+COPY apps/web/next.config.ts apps/web/tsconfig.json ./
+COPY apps/web/app ./app
+COPY apps/web/src ./src
+COPY apps/web/public ./public
+RUN npm run build \
+    && test -s .next/standalone/server.js \
+    && test -d .next/static
 
 
 FROM node:24.5-alpine AS web
@@ -94,6 +100,6 @@ USER node
 EXPOSE 3050
 
 HEALTHCHECK --interval=30s --timeout=5s --start-period=20s --retries=3 \
-    CMD wget -qO- http://127.0.0.1:3050/ >/dev/null || exit 1
+    CMD node -e "fetch('http://127.0.0.1:' + (process.env.PORT || '3050') + '/', {signal: AbortSignal.timeout(4000)}).then(r => process.exit(r.ok ? 0 : 1)).catch(() => process.exit(1))"
 
 CMD ["node", "server.js"]

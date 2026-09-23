@@ -5,6 +5,7 @@ services:
     build:
       context: .
       target: api
+      dockerfile: Dockerfile
     environment:
       SMARTDOCS_NER_MODE: required
       SMARTDOCS_NER_MODEL_PATH: /app/.models/roberta-base-bne-capitel-ner-plus
@@ -34,6 +35,7 @@ services:
     build:
       context: .
       target: web
+      dockerfile: Dockerfile
       args:
         SMARTDOCS_API_PROXY_TARGET: http://api:8050
         SMARTDOCS_FEATURE_PDF: ${SMARTDOCS_FEATURE_PDF:-false}
@@ -49,4 +51,3 @@ services:
       - "${SMARTDOCS_BIND_ADDRESS:-0.0.0.0}:${SMARTDOCS_WEB_PORT:-3050}:3050"
     restart: unless-stopped
     init: true
-

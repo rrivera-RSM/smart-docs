@@ -112,6 +112,24 @@ Con las variables de ejemplo, la interfaz y la API solo admiten DOCX y PPTX,
 flags visibles por Next.js se fijan durante el build, cualquier cambio exige
 reconstruir las imágenes con `docker compose up --build -d`.
 
+La imagen `web` instala sus dependencias dentro de Linux y genera un build
+standalone limpio; no utiliza `node_modules`, `.next` ni archivos `.env` del
+equipo desde el que se construye. El script de despliegue solo anuncia éxito
+cuando ambos contenedores están saludables. Si no lo consigue en 300 segundos,
+devuelve un error y muestra estados y logs. El plazo se puede ajustar con
+`SMARTDOCS_DEPLOY_TIMEOUT`.
+
+Si la web queda pendiente, comprobar primero la API: `web` espera a que su
+dependencia supere el healthcheck antes de arrancar.
+
+    docker compose ps -a
+    docker compose logs --tail=100 api web
+
+Para reconstruir únicamente el frontal con una API ya saludable:
+
+    docker compose build web
+    docker compose up -d --no-deps --wait --wait-timeout 60 web
+
 ## Anonimizador
 
 El anonimizador es un pipeline local de anonimización asistida:
