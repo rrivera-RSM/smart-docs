@@ -8,6 +8,7 @@ import pytest
 from fastapi.testclient import TestClient
 
 
+os.environ.setdefault("SMARTDOCS_AUTH_ENABLED", "false")
 os.environ.setdefault("SMARTDOCS_NER_MODE", "rules")
 os.environ.setdefault("SMARTDOCS_FEATURE_PDF", "true")
 os.environ.setdefault("SMARTDOCS_FEATURE_IMAGE_OCR", "true")

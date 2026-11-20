@@ -3,6 +3,14 @@ set -euo pipefail
 
 PROJECT_DIR="$(cd "$(dirname "$0")/.." && pwd)"
 
+ENV_FILE="${SMARTDOCS_ENV_FILE:-$PROJECT_DIR/.env}"
+if [[ -f "$ENV_FILE" ]]; then
+  set -a
+  # shellcheck disable=SC1090
+  . "$ENV_FILE"
+  set +a
+fi
+
 # shellcheck source=node-env.sh
 . "$PROJECT_DIR/scripts/node-env.sh"
 ensure_smartdocs_node
@@ -31,7 +39,8 @@ API_PID=$!
 
 (
   cd "$PROJECT_DIR/apps/web"
-  SMARTDOCS_API_PROXY_TARGET="http://127.0.0.1:$API_PORT" \
+  NEXTAUTH_URL="${NEXTAUTH_URL:-http://127.0.0.1:$WEB_PORT}" \
+    SMARTDOCS_API_PROXY_TARGET="http://127.0.0.1:$API_PORT" \
     npm run dev -- --hostname 127.0.0.1 --port "$WEB_PORT"
 ) &
 WEB_PID=$!

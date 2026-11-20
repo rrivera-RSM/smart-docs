@@ -1,10 +1,12 @@
 import os
 from urllib.parse import quote
 
-from fastapi import FastAPI, File, HTTPException, UploadFile
+from fastapi import APIRouter, FastAPI, File, HTTPException, Security, UploadFile
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import Response
 from apps.api.anonymizer_api import router as anonymizer_router
+from apps.api.finance.router import router as finance_router
+from apps.api.auth import auth_lifespan, require_azure_user
 
 from apps.api.schemas import (
     ApplyAnonymizationRequest,
@@ -38,7 +40,8 @@ MVP_LIMITATIONS = (
 app = FastAPI(
     title="SmartDocs API",
     version="0.1.0",
-    description="Document generation and human-reviewed anonymization.",
+    description="Document generation, human-reviewed anonymization and expense allocation.",
+    lifespan=auth_lifespan,
 )
 store = InMemoryJobStore(ttl_minutes=30)
 
@@ -55,7 +58,10 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
-app.include_router(anonymizer_router)
+auth_dependency = Security(require_azure_user, scopes=["user_impersonation"])
+app.include_router(anonymizer_router, dependencies=[auth_dependency])
+app.include_router(finance_router, dependencies=[auth_dependency])
+protected_router = APIRouter(prefix="/api", dependencies=[auth_dependency])
 
 
 async def _read_upload(upload: UploadFile) -> tuple[str, bytes]:
@@ -142,7 +148,7 @@ def health() -> dict[str, str]:
     return {"status": "ok", "service": "smartdocs-api"}
 
 
-@app.post("/api/legacy-anonymizer/analyze", include_in_schema=False)
+@protected_router.post("/legacy-anonymizer/analyze", include_in_schema=False)
 async def analyze_for_anonymization(
     file: UploadFile = File(...),
 ) -> dict[str, object]:
@@ -171,7 +177,7 @@ async def analyze_for_anonymization(
     }
 
 
-@app.post("/api/legacy-anonymizer/{job_id}/apply", include_in_schema=False)
+@protected_router.post("/legacy-anonymizer/{job_id}/apply", include_in_schema=False)
 def apply_anonymization(
     job_id: str,
     request: ApplyAnonymizationRequest,
@@ -217,7 +223,7 @@ def apply_anonymization(
     }
 
 
-@app.get("/api/legacy-anonymizer/{job_id}/download", include_in_schema=False)
+@protected_router.get("/legacy-anonymizer/{job_id}/download", include_in_schema=False)
 def download_anonymized(job_id: str) -> Response:
     job = _anonymizer_job(job_id)
     if job.output_bytes is None or job.output_name is None:
@@ -228,7 +234,7 @@ def download_anonymized(job_id: str) -> Response:
     return _download_response(job.output_bytes, job.output_name)
 
 
-@app.post("/api/generator/analyze")
+@protected_router.post("/generator/analyze")
 async def analyze_for_generation(
     file: UploadFile = File(...),
 ) -> dict[str, object]:
@@ -255,7 +261,7 @@ async def analyze_for_generation(
     }
 
 
-@app.post("/api/generator/{job_id}/repair")
+@protected_router.post("/generator/{job_id}/repair")
 def repair_template(job_id: str) -> dict[str, object]:
     job = _generator_job(job_id)
     analysis = job.template_analysis or analyze_template(job.source_bytes)
@@ -281,7 +287,7 @@ def repair_template(job_id: str) -> dict[str, object]:
     }
 
 
-@app.post("/api/generator/{job_id}/generate")
+@protected_router.post("/generator/{job_id}/generate")
 def generate_document(
     job_id: str,
     request: GenerateDocumentRequest,
@@ -320,7 +326,7 @@ def generate_document(
     }
 
 
-@app.get("/api/generator/{job_id}/download")
+@protected_router.get("/generator/{job_id}/download")
 def download_generated(job_id: str) -> Response:
     job = _generator_job(job_id)
     if job.output_bytes is None or job.output_name is None:
@@ -329,3 +335,6 @@ def download_generated(job_id: str) -> Response:
             detail="Todavía no se ha generado el documento.",
         )
     return _download_response(job.output_bytes, job.output_name)
+
+
+app.include_router(protected_router)

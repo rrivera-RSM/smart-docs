@@ -26,3 +26,6 @@ out/
 coverage.xml
 htmlcov/
 .pytest_cache/
+
+# Finance: perfiles locales y registro de usuarios observados.
+data/finance/

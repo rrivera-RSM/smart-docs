@@ -2,6 +2,7 @@
 branch = True
 source =
     src/docgen
+    src/finance_imputer
     apps/api
 omit =
     src/docgen/app.py

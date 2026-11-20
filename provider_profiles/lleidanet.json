@@ -1,0 +1,53 @@
+{
+  "schema_version": 1,
+  "id": "lleidanet",
+  "name": "Lleida.net",
+  "description": "Factura agrupada por usuario y servicio.",
+  "detection": {
+    "all_terms": ["lleida.net", "factura de venta"],
+    "page_limit": 2
+  },
+  "header": {
+    "page": 0,
+    "invoice_number": {
+      "pattern": "\\b(?P<value>FAC-[0-9-]+)\\b"
+    },
+    "invoice_date": {
+      "pattern": "Fecha\\s*:\\s*(?P<value>\\d{2}/\\d{2}/\\d{4})"
+    },
+    "customer_code": {
+      "pattern": "Cliente:\\s*(?P<value>\\d+)"
+    },
+    "customer_name": {
+      "pattern": "(?m)^(?P<value>RSM [^\\n]+)$",
+      "required": false,
+      "join_following_line": true
+    },
+    "taxable_base": {
+      "pattern": "BASE IMPONIBLE\\s+(?P<value>[\\d.,]+)"
+    },
+    "tax_rate": {
+      "pattern": "TOTAL IVA\\s+(?P<value>[\\d.,]+)\\s*%"
+    },
+    "tax_amount": {
+      "pattern": "TOTAL IVA\\s+[\\d.,]+\\s*%\\s+sobre\\s+[\\d.,]+\\s+(?P<value>[\\d.,]+)"
+    },
+    "invoice_total": {
+      "pattern": "TOTAL FACTURA\\s+(?P<value>[\\d.,]+)"
+    }
+  },
+  "lines": {
+    "mode": "grouped_detail",
+    "page": 1,
+    "user_pattern": "^(?P<user>[^\\s]+@[^\\s]+)\\s+[\\d.,]+\\s+EUR$",
+    "summary_pattern": "^(?P<service>.+?)\\s+(?P<quantity>[\\d.,]+)\\s+(?P<amount>[\\d.,]+)\\s+EUR$",
+    "detail_pattern": "^(?:Certificado|Unidad)\\s+(?P<quantity>[\\d.,]+)\\s+(?P<unit_price>[\\d.,]+)\\s+EUR\\s+(?P<amount>[\\d.,]+)\\s+EUR$",
+    "service_names": [
+      "FACTURA CERTIFICADA",
+      "E-MAIL CERTIFICADO",
+      "CLICK&SIGN BASE",
+      "CLICK&SIGN START",
+      "C&S REGISTERED UPLOAD FILES"
+    ]
+  }
+}

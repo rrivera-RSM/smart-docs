@@ -1,8 +1,5 @@
 import type { NextConfig } from "next";
 
-const apiTarget =
-  process.env.SMARTDOCS_API_PROXY_TARGET ?? "http://127.0.0.1:8050";
-
 function publicFlag(publicName: string, serverName: string): string {
   return process.env[publicName] ?? process.env[serverName] ?? "false";
 }
@@ -29,14 +26,6 @@ const nextConfig: NextConfig = {
   },
   turbopack: {
     root: process.cwd(),
-  },
-  async rewrites() {
-    return [
-      {
-        source: "/api/:path*",
-        destination: `${apiTarget}/api/:path*`,
-      },
-    ];
   },
 };
 

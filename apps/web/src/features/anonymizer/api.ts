@@ -6,8 +6,6 @@ import type {
   ManualFinding,
 } from "./contract";
 
-const baseUrl = process.env.NEXT_PUBLIC_API_URL?.replace(/\/$/, "") ?? "";
-
 export class AnonymizerApiError extends Error {
   constructor(message: string, readonly status: number) {
     super(message);
@@ -30,7 +28,7 @@ async function parse<T>(response: Response): Promise<T> {
 
 async function json<T>(path: string, method: string, body?: unknown): Promise<T> {
   return parse<T>(
-    await fetch(baseUrl + path, {
+    await fetch(path, {
       method,
       headers: body === undefined ? undefined : { "Content-Type": "application/json" },
       body: body === undefined ? undefined : JSON.stringify(body),
@@ -41,7 +39,7 @@ async function json<T>(path: string, method: string, body?: unknown): Promise<T>
 
 export const anonymizerApi = {
   downloadUrl(path: string) {
-    return baseUrl + path;
+    return path;
   },
 
   capabilities() {
@@ -53,7 +51,7 @@ export const anonymizerApi = {
     body.append("file", file);
     body.append("options", JSON.stringify(options));
     return parse<AnonymizerJob>(
-      await fetch(baseUrl + "/api/anonymizer/analyze", { method: "POST", body }),
+      await fetch("/api/anonymizer/analyze", { method: "POST", body }),
     );
   },
 
@@ -82,7 +80,7 @@ export const anonymizerApi = {
   },
 
   async remove(jobId: string) {
-    const response = await fetch(baseUrl + `/api/anonymizer/${jobId}`, {
+    const response = await fetch(`/api/anonymizer/${jobId}`, {
       method: "DELETE",
     });
     if (!response.ok && response.status !== 404) await parse(response);

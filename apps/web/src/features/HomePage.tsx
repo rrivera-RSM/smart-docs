@@ -1,5 +1,6 @@
 import {
   FileText,
+  Receipt,
   ShieldCheck,
 } from "lucide-react";
 
@@ -47,6 +48,20 @@ export function HomePage() {
               "Personas, empresas, ubicaciones e importes",
               "Revisión agrupada de detecciones",
               "Saneamiento y verificación residual",
+            ]}
+          />
+          <ToolCard
+            to="/finance"
+            eyebrow="Finanzas"
+            title="Imputación de gastos"
+            description="Extrae las líneas de una factura PDF, revisa sus referencias de proyecto y exporta los gastos validados a Excel."
+            action="Abrir proyecto"
+            icon={Receipt}
+            tone="blue"
+            features={[
+              "Detalle de factura y referencias de proyecto",
+              "Moderación y conciliación de importes",
+              "Excel con las líneas aceptadas",
             ]}
           />
         </div>

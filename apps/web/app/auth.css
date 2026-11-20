@@ -1,0 +1,118 @@
+.account-summary {
+  display: flex;
+  max-width: 260px;
+  align-items: center;
+  gap: 8px;
+  padding: 5px 6px 5px 10px;
+  border: 1px solid #d7dee4;
+  border-radius: 9px;
+  color: #475569;
+  background: #fff;
+  font-size: 0.7rem;
+  font-weight: 700;
+}
+
+.account-summary > span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.account-summary button {
+  display: grid;
+  flex: 0 0 28px;
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  place-items: center;
+  border: 0;
+  border-radius: 7px;
+  color: #64748b;
+  background: #f1f5f9;
+  cursor: pointer;
+}
+
+.account-summary button:hover {
+  color: var(--rsm-midnight);
+  background: #e2e8f0;
+}
+
+.auth-redirect {
+  display: grid;
+  min-height: min(620px, calc(100dvh - 190px));
+  place-items: center;
+  padding: 32px 0;
+}
+
+.auth-redirect__card {
+  display: grid;
+  width: min(100%, 440px);
+  justify-items: center;
+  padding: 48px 42px;
+  border: 1px solid #d7dee4;
+  border-radius: 14px;
+  background: #fff;
+  box-shadow: 0 18px 45px rgb(15 23 42 / 0.1);
+  text-align: center;
+}
+
+.auth-redirect__card img {
+  width: 168px;
+  height: auto;
+  margin-bottom: 34px;
+}
+
+.auth-redirect__card h1 {
+  margin: 17px 0 0;
+  color: #0f172a;
+  font-size: 1.45rem;
+  letter-spacing: -0.025em;
+}
+
+.auth-redirect__card p {
+  margin: 10px 0 24px;
+  color: #64748b;
+  font-size: 0.84rem;
+  line-height: 1.55;
+}
+
+.auth-redirect__spinner {
+  width: 32px;
+  height: 32px;
+  border: 3px solid rgb(var(--rsm-blue-rgb) / 0.18);
+  border-top-color: var(--rsm-blue);
+  border-radius: 50%;
+  animation: auth-spin 750ms linear infinite;
+}
+
+@keyframes auth-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (max-width: 820px) {
+  .account-summary > span {
+    display: none;
+  }
+
+  .account-summary {
+    padding-left: 6px;
+  }
+}
+
+@media (max-width: 560px) {
+  .account-summary > svg {
+    display: none;
+  }
+
+  .auth-redirect__card {
+    padding: 38px 24px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .auth-redirect__spinner {
+    animation: none;
+  }
+}
