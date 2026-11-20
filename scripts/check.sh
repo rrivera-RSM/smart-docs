@@ -10,6 +10,7 @@ ensure_smartdocs_node
 cd "$PROJECT_DIR"
 SMARTDOCS_NER_MODE=rules PYTHONPATH=src:. .venv/bin/python -m pytest \
   --cov=docgen \
+  --cov=finance_imputer \
   --cov=apps.api \
   --cov-config=.coveragerc \
   --cov-report=term-missing \

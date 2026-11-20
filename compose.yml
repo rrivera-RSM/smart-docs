@@ -7,6 +7,11 @@ services:
       target: api
       dockerfile: Dockerfile
     environment:
+      SMARTDOCS_AUTH_ENABLED: ${SMARTDOCS_AUTH_ENABLED:-true}
+      SMARTDOCS_AZURE_TENANT_ID: ${SMARTDOCS_AZURE_TENANT_ID:-}
+      SMARTDOCS_AZURE_API_CLIENT_ID: ${SMARTDOCS_AZURE_API_CLIENT_ID:-}
+      FINANCE_IMPUTER_TOLERANCE_PERCENTAGE: ${FINANCE_IMPUTER_TOLERANCE_PERCENTAGE:-0.10}
+      FINANCE_IMPUTER_PROVIDER_DIR: /app/data/finance/providers
       SMARTDOCS_NER_MODE: required
       SMARTDOCS_NER_MODEL_PATH: /app/.models/roberta-base-bne-capitel-ner-plus
       TRANSFORMERS_OFFLINE: "1"
@@ -18,6 +23,8 @@ services:
     ports:
       - "${SMARTDOCS_API_BIND_ADDRESS:-127.0.0.1}:${SMARTDOCS_API_PORT:-8050}:8050"
     read_only: true
+    volumes:
+      - finance-data:/app/data/finance
     tmpfs:
       - /tmp:size=256m,mode=1777
     healthcheck:
@@ -37,13 +44,21 @@ services:
       target: web
       dockerfile: Dockerfile
       args:
-        SMARTDOCS_API_PROXY_TARGET: http://api:8050
+        SMARTDOCS_AUTH_ENABLED: ${SMARTDOCS_AUTH_ENABLED:-true}
         SMARTDOCS_FEATURE_PDF: ${SMARTDOCS_FEATURE_PDF:-false}
         SMARTDOCS_FEATURE_IMAGE_OCR: ${SMARTDOCS_FEATURE_IMAGE_OCR:-false}
         SMARTDOCS_FEATURE_WEBADMIN: ${SMARTDOCS_FEATURE_WEBADMIN:-false}
     environment:
       HOSTNAME: 0.0.0.0
       PORT: "3050"
+      SMARTDOCS_API_PROXY_TARGET: http://api:8050
+      SMARTDOCS_AUTH_ENABLED: ${SMARTDOCS_AUTH_ENABLED:-true}
+      SMARTDOCS_AZURE_TENANT_ID: ${SMARTDOCS_AZURE_TENANT_ID:-}
+      SMARTDOCS_AZURE_WEB_CLIENT_ID: ${SMARTDOCS_AZURE_WEB_CLIENT_ID:-}
+      SMARTDOCS_AZURE_WEB_CLIENT_SECRET: ${SMARTDOCS_AZURE_WEB_CLIENT_SECRET:-}
+      SMARTDOCS_AZURE_API_CLIENT_ID: ${SMARTDOCS_AZURE_API_CLIENT_ID:-}
+      NEXTAUTH_SECRET: ${NEXTAUTH_SECRET:-}
+      NEXTAUTH_URL: ${NEXTAUTH_URL:-http://localhost:3050}
     depends_on:
       api:
         condition: service_healthy
@@ -51,3 +66,6 @@ services:
       - "${SMARTDOCS_BIND_ADDRESS:-0.0.0.0}:${SMARTDOCS_WEB_PORT:-3050}:3050"
     restart: unless-stopped
     init: true
+
+volumes:
+  finance-data:

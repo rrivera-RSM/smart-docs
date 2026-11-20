@@ -7,11 +7,12 @@
     "build": "next build",
     "start": "next start",
     "typecheck": "tsc --noEmit",
-    "generate:api-types": "cd ../.. && SMARTDOCS_NER_MODE=rules PYTHONPATH=src:. .venv/bin/python scripts/export_openapi.py apps/web/openapi.json && cd apps/web && openapi-typescript openapi.json -o src/features/anonymizer/openapi.generated.ts"
+    "generate:api-types": "cd ../.. && SMARTDOCS_AUTH_ENABLED=false SMARTDOCS_NER_MODE=rules PYTHONPATH=src:. .venv/bin/python scripts/export_openapi.py apps/web/openapi.json && cd apps/web && openapi-typescript openapi.json -o src/features/anonymizer/openapi.generated.ts"
   },
   "dependencies": {
     "lucide-react": "^0.563.0",
     "next": "16.2.11",
+    "next-auth": "^4.24.13",
     "react": "19.2.7",
     "react-dom": "19.2.7"
   },

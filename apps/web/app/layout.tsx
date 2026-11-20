@@ -3,8 +3,10 @@ import { headers } from "next/headers";
 import type { PropsWithChildren } from "react";
 
 import { AppShell } from "@/src/components/AppShell";
+import { AuthProvider } from "@/src/components/AuthProvider";
 
 import "@/src/styles.css";
+import "./auth.css";
 import "./people-analytics.css";
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -27,7 +29,7 @@ export async function generateMetadata(): Promise<Metadata> {
       template: "%s | SmartDocs",
     },
     description:
-      "Espacio interno de RSM para generar y anonimizar documentos con revisión humana.",
+      "Espacio interno de RSM para generar y anonimizar documentos e imputar gastos con revisión humana.",
     openGraph: {
       type: "website",
       locale: "es_ES",
@@ -55,7 +57,9 @@ export default function RootLayout({ children }: PropsWithChildren) {
   return (
     <html lang="es" data-light-preset="slate-mist">
       <body>
-        <AppShell>{children}</AppShell>
+        <AuthProvider>
+          <AppShell>{children}</AppShell>
+        </AuthProvider>
       </body>
     </html>
   );

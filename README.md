@@ -1,12 +1,14 @@
 # SmartDocs
 
-SmartDocs es una suite interna para automatizar documentos. Este MVP reúne dos
+SmartDocs es una suite interna para automatizar documentos. Este MVP reúne tres
 flujos bajo una interfaz web común:
 
 - **Generador**: valida plantillas DOCX, PDF y PPTX con variables simples,
   propone reparaciones para DOCX y genera documentos en el formato de entrada.
 - **Anonimizador**: detecta datos estructurados, permite revisión humana y crea
   una copia anonimizada de DOCX, PDF o PPTX.
+- **Imputación de gastos**: extrae líneas de facturas PDF, permite moderar
+  importes y referencias de proyecto y exporta a Excel las líneas aceptadas.
 
 La aplicación Streamlit original se mantiene disponible como interfaz legacy.
 El frontend principal usa Next.js y comparte el sistema visual corporativo de
@@ -22,6 +24,10 @@ People Analytics.
       ui/                  componentes de la interfaz Streamlit legacy
       template_service.py  orquestación del generador
     tests/                 dominio, API, seguridad y smoke tests
+    src/finance_imputer/   extracción, conciliación y exportación de facturas
+    provider_profiles/     perfiles declarativos incluidos de proveedores
+    apps/api/finance/      rutas de imputación bajo /api/finance
+    docs/finance/          arquitectura y operación de imputación de gastos
 
 La lógica de documentos no depende del framework web. FastAPI actúa como capa
 de transporte y Next.js se ocupa de rutas, navegación, presentación y proxy
@@ -72,12 +78,16 @@ muestran al arrancar. Los puertos iniciales pueden fijarse con
 
 ### Feature flags del despliegue
 
-El despliegue de fase 1 expone DOCX y PPTX. PDF, OCR de imágenes y WebAdmin
-permanecen apagados por defecto:
+En generador y anonimizador, el despliegue de fase 1 expone DOCX y PPTX.
+Sus funciones PDF, OCR de imágenes y WebAdmin permanecen apagadas por defecto:
 
     SMARTDOCS_FEATURE_PDF=false
     SMARTDOCS_FEATURE_IMAGE_OCR=false
     SMARTDOCS_FEATURE_WEBADMIN=false
+
+Estos flags pertenecen a las herramientas documentales previas. Imputación
+de gastos acepta PDFs digitales y mantiene su propia vista informativa de
+acceso en `/finance/webadmin`, bajo la autenticación corporativa común.
 
 Next.js incorpora estos valores durante la compilación y FastAPI los comprueba
 en cada subida. Activar únicamente el flag del frontend no permite saltarse la
@@ -96,6 +106,36 @@ También pueden iniciarse por separado:
     nvm use
     npm run dev
 
+### Autenticación corporativa
+
+La web usa NextAuth con Microsoft Entra ID y solicita el scope delegado
+`user_impersonation` de la aplicación registrada para FastAPI. Todas las
+operaciones de documentos pasan por el proxy autenticado de Next.js; FastAPI
+valida el bearer token y mantiene público únicamente `/api/health`.
+
+Configura estas variables en `.env`:
+
+    SMARTDOCS_AUTH_ENABLED=true
+    SMARTDOCS_AZURE_TENANT_ID=
+    SMARTDOCS_AZURE_WEB_CLIENT_ID=
+    SMARTDOCS_AZURE_WEB_CLIENT_SECRET=
+    SMARTDOCS_AZURE_API_CLIENT_ID=
+    NEXTAUTH_SECRET=
+    NEXTAUTH_URL=
+
+`SMARTDOCS_AZURE_WEB_CLIENT_ID` y
+`SMARTDOCS_AZURE_WEB_CLIENT_SECRET` pertenecen al registro de la aplicación
+web. `SMARTDOCS_AZURE_API_CLIENT_ID` pertenece al registro de FastAPI, que
+debe exponer `api://<client-id>/user_impersonation`. En el registro web añade
+ese permiso delegado y configura como URI de redirección
+`<NEXTAUTH_URL>/api/auth/callback/azure-ad`.
+
+`NEXTAUTH_SECRET` protege las cookies de sesión y debe ser un valor aleatorio
+independiente del secreto de Azure; puede generarse con
+`openssl rand -base64 32`. En desarrollo, `scripts/dev.sh` calcula
+`NEXTAUTH_URL` cuando se deja vacía. `SMARTDOCS_AUTH_ENABLED=false` se
+reserva para pruebas locales y CI sin conexión a Azure.
+
 ### Despliegue de fase 1
 
 El despliegue de producción se compone de una imagen FastAPI y otra Next.js. La
@@ -107,7 +147,7 @@ build de la imagen; el contenedor no descarga modelos en runtime.
     cp .env.example .env
     ./scripts/deploy.sh
 
-Con las variables de ejemplo, la interfaz y la API solo admiten DOCX y PPTX,
+Después de completar las variables de autenticación, la interfaz y la API solo admiten DOCX y PPTX,
 `/webadmin` responde `404` y PDF/OCR quedan reservados para fase 2. Como las
 flags visibles por Next.js se fijan durante el build, cualquier cambio exige
 reconstruir las imágenes con `docker compose up --build -d`.
@@ -213,8 +253,7 @@ una referencia de desarrollo, no una garantía para todos los DOCX.
 
 El producto se presenta como anonimización asistida. La confirmación humana es
 obligatoria y no se promete ausencia absoluta de falsos negativos. El piloto
-no incluye autenticación corporativa, multitenencia, Redis ni auditoría
-persistente.
+no incluye multitenencia, Redis ni auditoría persistente.
 
 ## Generador
 
@@ -231,6 +270,31 @@ PoC admite marcadores simples como {{ cliente }}. PPTX sustituye texto sobre
 OOXML; PDF reconstruye el resultado como páginas rasterizadas, por lo que la
 copia pierde selección de texto y accesibilidad semántica a cambio de eliminar
 capas, metadatos y adjuntos ocultos.
+
+## Imputación de gastos
+
+Finance Imputer se integra como tercera herramienta en `/finance`. Incluye
+carga de un PDF digital, moderación editable y exportación Excel de líneas
+aceptadas; `/finance/proveedores` permite probar y guardar perfiles JSON y
+`/finance/webadmin` muestra la política de acceso y usuarios observados.
+
+Todo se ejecuta con la web y API de SmartDocs: no necesita otro proceso,
+puerto ni registro de aplicación en Entra ID. Los endpoints `/api/finance/*`
+usan la misma dependencia de autenticación que generador y anonimizador.
+
+Los perfiles incluidos viven en `provider_profiles/` y los creados desde la
+interfaz en `data/finance/providers/`. Docker Compose monta un volumen
+`finance-data` para preservar estos perfiles y el registro informativo de
+acceso. Las sesiones de factura siguen en memoria con TTL de 60 minutos.
+
+La tolerancia de conciliación se configura con
+`FINANCE_IMPUTER_TOLERANCE_PERCENTAGE` (por defecto `0.10` %). La extracción
+actual requiere un perfil compatible: Docling sigue siendo una PoC opcional.
+No se incorporan PDFs reales, Excel de validación ni secretos del proyecto
+original al código de SmartDocs.
+
+Consulta [la guía de integración](docs/finance/README.md) para rutas,
+pruebas, persistencia, limitaciones y continuidad del proyecto original.
 
 ## Calidad
 

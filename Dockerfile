@@ -29,6 +29,7 @@ RUN python -m pip install --upgrade pip \
 
 COPY src ./src
 COPY apps/api ./apps/api
+COPY provider_profiles ./provider_profiles
 COPY scripts/prepare_ner_model.py ./scripts/prepare_ner_model.py
 
 # El modelo se fija y verifica durante el build. Nunca se descarga al arrancar.
@@ -37,6 +38,7 @@ RUN TRANSFORMERS_OFFLINE=0 HF_HUB_OFFLINE=0 \
     && find .models -type d -name .cache -prune -exec rm -rf {} +
 
 RUN useradd --create-home --uid 10001 smartdocs \
+    && mkdir -p /app/data/finance/providers /app/data/finance/access \
     && chown -R smartdocs:smartdocs /app
 
 USER smartdocs
@@ -61,19 +63,21 @@ FROM web-dependencies AS web-build
 WORKDIR /app
 
 ARG SMARTDOCS_API_PROXY_TARGET=http://api:8050
+ARG SMARTDOCS_AUTH_ENABLED=true
 ARG SMARTDOCS_FEATURE_PDF=false
 ARG SMARTDOCS_FEATURE_IMAGE_OCR=false
 ARG SMARTDOCS_FEATURE_WEBADMIN=false
 
 ENV SMARTDOCS_API_PROXY_TARGET=$SMARTDOCS_API_PROXY_TARGET \
     NEXT_TELEMETRY_DISABLED=1 \
+    SMARTDOCS_AUTH_ENABLED=$SMARTDOCS_AUTH_ENABLED \
     SMARTDOCS_FEATURE_PDF=$SMARTDOCS_FEATURE_PDF \
     SMARTDOCS_FEATURE_IMAGE_OCR=$SMARTDOCS_FEATURE_IMAGE_OCR \
     SMARTDOCS_FEATURE_WEBADMIN=$SMARTDOCS_FEATURE_WEBADMIN
 
 # Copy only source files: local builds, native dependencies and .env files
 # must not overwrite the clean container installation.
-COPY apps/web/next.config.ts apps/web/tsconfig.json ./
+COPY apps/web/next.config.ts apps/web/tsconfig.json apps/web/middleware.ts ./
 COPY apps/web/app ./app
 COPY apps/web/src ./src
 COPY apps/web/public ./public
@@ -100,6 +104,6 @@ USER node
 EXPOSE 3050
 
 HEALTHCHECK --interval=30s --timeout=5s --start-period=20s --retries=3 \
-    CMD node -e "fetch('http://127.0.0.1:' + (process.env.PORT || '3050') + '/', {signal: AbortSignal.timeout(4000)}).then(r => process.exit(r.ok ? 0 : 1)).catch(() => process.exit(1))"
+    CMD node -e "fetch('http://127.0.0.1:' + (process.env.PORT || '3050') + '/api/health', {signal: AbortSignal.timeout(4000)}).then(r => process.exit(r.ok ? 0 : 1)).catch(() => process.exit(1))"
 
 CMD ["node", "server.js"]

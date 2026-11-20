@@ -5,8 +5,6 @@ import type {
   GeneratorAnalysis,
 } from "../types";
 
-const configuredBase = process.env.NEXT_PUBLIC_API_URL?.replace(/\/$/, "") ?? "";
-
 export class ApiError extends Error {
   constructor(
     message: string,
@@ -17,7 +15,7 @@ export class ApiError extends Error {
 }
 
 export function apiUrl(path: string): string {
-  return configuredBase + path;
+  return path;
 }
 
 async function parseResponse<T>(response: Response): Promise<T> {
